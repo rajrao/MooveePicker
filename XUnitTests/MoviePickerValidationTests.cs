@@ -281,6 +281,42 @@ namespace XUnitTests
 			//Assert.Equal(7, best.Movies.Count(movie => movie.Name == "47 Meters Down"));
 		}
 
+		[Fact]
+		public void MoviePicker_ChooseBest_WeekEnding_20170723_Week8()
+		{
+			var test = ConstructTestObject();
+			var movies = new List<IMovie>();
+
+			int id = 1;
+
+			movies.Add(ConstructMovie(id++, "Valerian and the City of a Thousand Planets", 17.65m, 219));
+			movies.Add(ConstructMovie(id++, "Dunkirk", 54.1m, 667));
+			movies.Add(ConstructMovie(id++, "Spider-Man", 21.305m, 266));
+			movies.Add(ConstructMovie(id++, "Despicable Me 3", 11.85m, 148));
+			movies.Add(ConstructMovie(id++, "War for the Planet of the Apes", 24.7m, 299));
+			movies.Add(ConstructMovie(id++, "Cars 3", 1.94m, 22));
+			movies.Add(ConstructMovie(id++, "Baby Driver", 5.68m, 70));
+			movies.Add(ConstructMovie(id++, "The Big Sick", 4.945m, 54));
+			movies.Add(ConstructMovie(id++, "Wonder Woman", 4.565m, 57));
+			movies.Add(ConstructMovie(id++, "Wish Upon", 2.11m, 33));
+			movies.Add(ConstructMovie(id++, "Transformers", 1m, 14));
+			movies.Add(ConstructMovie(id++, "The House", 0.736m, 10));
+			movies.Add(ConstructMovie(id++, "47 Meters Down", 0.468m, 6));
+			movies.Add(ConstructMovie(id++, "The Beguiled", 0.398m, 5));
+			movies.Add(ConstructMovie(id++, "Girls Trip", 23.9m, 334));
+
+
+			test.AddMovies(movies);
+
+			var best = test.ChooseBest();
+
+			WritePicker(test);
+			WriteMovies(best);
+
+			//Assert.Equal(1, best.Movies.Count(movie => movie.Name == "Transformers"));
+			//Assert.Equal(7, best.Movies.Count(movie => movie.Name == "47 Meters Down"));
+		}
+
 		/*
 		[Fact]
 		public void MoviePicker_ChooseBest_WeekEnding_2017MMDD_Week_N_Template()

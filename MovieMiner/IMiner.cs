@@ -1,15 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+
+using MoviePicker.Common.Interfaces;
 
 namespace MovieMiner
 {
-	interface IMiner
+	// TODO: Might want to change the interface to send in a list of movies to look for to help out the scan.
+
+	public interface IMiner
 	{
 		string Url { get; }
 
-		void Mine();
+		List<IMovie> Mine();
+
+		Task<List<IMovie>> MineAsync();
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+
 using MoviePicker.Common.Interfaces;
 
 namespace MooveePicker
@@ -7,15 +8,20 @@ namespace MooveePicker
 	public class MoviePicker : IMoviePicker
 	{
 		private readonly List<IMovieList> _bestMovies;      // A list of top movies (not sorted)
-		private decimal _minimumTopEarnings;				// Keep track of the lowest earnings in the list.
-		private readonly List<IMovie> _movies;				// The list of baseline movies.
+		private decimal _minimumTopEarnings;                // Keep track of the lowest earnings in the list.
+		private readonly List<IMovie> _movies;              // The list of baseline movies.
 		private readonly IMovieList _movieListPrototype;
 
 		// Store the already processed sub-problems
 		private readonly HashSet<int> _processedHashes;
 
+		private IMovie _bestPerformer;
+		private List<IMovie> _bestPerformers;
+		private bool _enableBestPerformer;
+
 		public MoviePicker(IMovieList movieListPrototype)
 		{
+			_enableBestPerformer = true;
 			_movies = new List<IMovie>();
 			_processedHashes = new HashSet<int>();
 
@@ -23,6 +29,40 @@ namespace MooveePicker
 
 			ScreenCount = 8;
 			TotalCost = 1000;
+		}
+
+		/// <summary>
+		/// Best Performer will return a value ONLY if it is the BEST performer (and there are no ties)
+		/// </summary>
+		public IMovie BestPerformer => _bestPerformer != null && _bestPerformers == null ? _bestPerformer : null;
+
+		/// <summary>
+		/// A list of TIED Best Performers.
+		/// </summary>
+		public IEnumerable<IMovie> BestPerformers => _bestPerformers;
+
+		public bool EnableBestPerformer
+		{
+			get
+			{
+				return _enableBestPerformer;
+			}
+			set
+			{
+				_enableBestPerformer = value;
+
+				if (_enableBestPerformer)
+				{
+					// Re-add the movies.
+				}
+				else
+				{
+					foreach (var movie in _movies)
+					{
+						movie.IsBestPerformer = false;
+					}
+				}
+			}
 		}
 
 		public IEnumerable<IMovie> Movies => _movies;
@@ -42,6 +82,44 @@ namespace MooveePicker
 			foreach (var movie in movies)
 			{
 				_movies.Add(movie);
+			}
+
+			if (EnableBestPerformer)
+			{
+				_bestPerformer = null;
+				_bestPerformers = null;
+
+				foreach (var movie in _movies.OrderByDescending(item => item.Efficiency))
+				{
+					if (_bestPerformer == null)
+					{
+						// Assign the first one as the best performer.
+
+						_bestPerformer = movie;
+						movie.IsBestPerformer = true;
+					}
+					else if (_bestPerformer.Efficiency == movie.Efficiency)
+					{
+						// Check to see if there are MANY tied Best Performers
+
+						if (_bestPerformers == null)
+						{
+							_bestPerformers = new List<IMovie> { _bestPerformer };
+						}
+
+						movie.IsBestPerformer = true;
+						_bestPerformers.Add(movie);
+					}
+					else
+					{
+						break;
+					}
+				}
+			}
+
+			if (_bestPerformers != null)
+			{
+				_bestPerformer = null;		// There is NO one best performer.
 			}
 		}
 

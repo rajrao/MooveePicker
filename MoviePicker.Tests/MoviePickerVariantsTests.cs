@@ -17,7 +17,7 @@ namespace MoviePicker.Tests
 		// Unity Reference: https://msdn.microsoft.com/en-us/library/ff648211.aspx
 		private static IUnityContainer _unity;
 
-		protected override IUnityContainer UnityContainer => _unity;
+		public override IUnityContainer UnityContainer => _unity;
 
 		[ClassInitialize]
 		public static void InitializeBeforeAllTests(TestContext context)
@@ -356,7 +356,48 @@ namespace MoviePicker.Tests
 			}
 		}
 
-		[TestMethod]
+        [TestMethod]
+        public void MoviePickerVariantsAll_ChooseBest_Parker_20170813()
+        {
+            var test = ConstructTestObject();
+            var movies = new List<IMovie>();
+            int id = 1;
+
+            // The baseline movie list.
+
+            movies.Add(ConstructMovie(id++, "Annabelle", 30.15m, 380));
+            movies.Add(ConstructMovie(id++, "The Nut Job 2", 11.45m, 176));
+            movies.Add(ConstructMovie(id++, "Dunkirk", 11.631875m, 143));
+            movies.Add(ConstructMovie(id++, "The Dark Tower", 7.793625m, 106));
+            movies.Add(ConstructMovie(id++, "Girls Trip", 6.897625m, 89));
+            movies.Add(ConstructMovie(id++, "The Emoji Movie", 5.88525m, 77));
+            movies.Add(ConstructMovie(id++, "Spider-Man", 5.724m, 75));
+            movies.Add(ConstructMovie(id++, "Kidnap", 5.109m, 72));
+            movies.Add(ConstructMovie(id++, "Detroit", 4.16675m, 56));
+            movies.Add(ConstructMovie(id++, "Atomic Blonde", 4.17925m, 54));
+            movies.Add(ConstructMovie(id++, "The Glass Castle", 3.5375m, 52));
+            movies.Add(ConstructMovie(id++, "Despicable Me 3", 3.465625m, 44));
+            movies.Add(ConstructMovie(id++, "War for the Planet of the Apes", 3.448125m, 43));
+            movies.Add(ConstructMovie(id++, "Baby Driver", 1.52925m, 21));
+            movies.Add(ConstructMovie(id++, "Wonder Woman", 1.4745m, 20));
+
+            test.AddMovies(movies);
+
+            var best = test.ChooseBest();
+
+            WritePicker(test);
+            WriteMovies(best);
+            Debug.WriteLine(string.Empty);
+
+            foreach (var movieList in ((MoviePickerVariants)test).GetRankedMovieLists())
+            {
+                WriteMovies(movieList);
+                Debug.WriteLine($"Total List Count: {((MoviePickerVariants)test).GetRankedMovieListCount(movieList)}");
+                Debug.WriteLine(string.Empty);
+            }
+        }
+
+        [TestMethod]
 		public void MoviePickerVariants_ChooseBest_Raj_2017061()
 		{
 			var test = ConstructTestObject();

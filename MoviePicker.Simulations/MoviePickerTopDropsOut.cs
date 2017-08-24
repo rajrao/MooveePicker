@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using MoviePicker.Common;
 using MoviePicker.Common.Interfaces;
@@ -29,6 +30,35 @@ namespace MooveePicker
 		public int TotalComparisons { get; set; }
 
 		public int TotalSubProblems { get; set; }
+
+        public IMovie BestPerformer
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public IEnumerable<IMovie> BestPerformers
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+		public bool EnableBestPerformer
+		{
+			get
+			{
+				throw new NotImplementedException();
+			}
+
+			set
+			{
+				throw new NotImplementedException();
+			}
+		}
 
 		public void AddMovies(IEnumerable<IMovie> movies)
 		{
